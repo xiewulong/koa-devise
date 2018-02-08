@@ -1,0 +1,29 @@
+{
+  "name": "koa-devise",
+  "version": "0.0.1",
+  "description": "Koa authentication solution",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./sample/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiewulong/koa-devise.git"
+  },
+  "keywords": [
+    "koa",
+    "devise",
+    "authentication",
+    "user"
+  ],
+  "author": "xiewulong <xiewulong@vip.qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xiewulong/koa-devise/issues"
+  },
+  "homepage": "https://github.com/xiewulong/koa-devise#readme",
+  "devDependencies": {
+    "koa": "^2.4.1",
+    "koa-session": "^5.8.1"
+  }
+}

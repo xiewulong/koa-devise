@@ -1,39 +1,21 @@
-# Koa devise
+/*!
+ * App
+ * xiewulong <xiewulong@vip.qq.com>
+ * create: 2018/02/08
+ * since: 0.0.1
+ */
+'use strict';
 
-Koa 用户认证解决方案
-
-## 目录
-
-<details>
-
-* [安装](#install)
-* [使用](#useage)
-* [License](#license)
-
-</details>
-
-## Install
-
-安装
-
-```bash
-$ npm i [-S] koa-devise
-```
-
-## Useage
-
-配置和使用
-
-```js
 const Koa = require('koa');
-const devise = require('koa-devise');
 const session = require('koa-session');
+const devise = require('../');
 
-const app = new Koa();
+const app = module.exports = new Koa();
+const development = app.env === 'development';
+const production = app.env === 'production';
 
-app.keys = ['APP COOKIE SECRET KEY']
+app.keys = ['APP COOKIE SECRET KEY'];
 app
-  // ...
   .use(session(app))
   .use(devise({
     // context_key: 'user',       // Identity key in context, default: user
@@ -60,23 +42,23 @@ app
     ctx.type = 'html';
     ctx.body = ctx.authenticate(false) && `${ctx.user.username}, <a href=\"/user/logout\">Sign out</a>` || "<a href=\"/user/login\">Sign in</a>";
   })
-  // ...
-  ;
-```
+  .use(async (ctx) => {
+    ctx.status = 404;
 
-鉴权, 设置一个路由必须登录后才能访问
-
-```js
-app
-  // ...
-  .use(async(ctx, next) => {
-    ctx.authenticate();
-    ctx.body = 'User is Signed in if you can see this';
+    let text = 'Page Not Found';
+    switch(ctx.accepts('html', 'json')) {
+      case 'html':
+        ctx.type = 'html';
+        ctx.body = `<p>${text}</p>`;
+        break;
+      case 'json':
+        ctx.body = {message: text};
+        break;
+      default:
+        ctx.type = 'text';
+        ctx.body = text;
+    }
   })
-  // ...
   ;
-```
 
-## License
-
-MIT - [xiewulong](https://github.com/xiewulong)
+!module.parent && app.listen(3000);
