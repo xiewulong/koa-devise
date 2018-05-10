@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const default_options = {
+const DEFAULT_OPTIONS = {
   context_key: 'user',       // Identity key in context, default: user
   login_url: '/user/login',  // Login in url for session none, default: '/user/login'
   session_key: 'user',       // Devise key in session, default: user
@@ -18,7 +18,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
     [identity, options] = [options, identity];
   }
 
-  options = Object.assign({}, default_options, options || {});
+  options = Object.assign({}, DEFAULT_OPTIONS, options || {});
 
   return async (ctx, next) => {
     let now = + new Date();
