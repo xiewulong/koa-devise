@@ -32,14 +32,18 @@ module.exports = (options = {}, identity = (id) => {}) => {
 
     Object.defineProperties(ctx, {
       authenticate: {
-        value(redirect_url) {
+        value(redirect = true) {
           let guest = !this[options.context_key];
 
-          if(redirect_url === false) {
-            return !guest;
+          if(!guest) {
+            return true;
           }
 
-          guest && this.redirect(redirect_url || options.login_url);
+          if(!redirect || !options.login_url) {
+            return false;
+          }
+
+          this.redirect(options.login_url);
         },
       },
       login: {
@@ -55,5 +59,16 @@ module.exports = (options = {}, identity = (id) => {}) => {
     });
 
     await next();
+  };
+};
+
+module.exports.authenticate = (redirect = true, message = 'Unauthorized') => {
+  return async (ctx, next) => {
+    if(ctx.authenticate(redirect)) {
+      return await next();
+    }
+
+    ctx.status = 401;
+    ctx.body = {message};
   };
 };
