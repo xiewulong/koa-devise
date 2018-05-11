@@ -68,7 +68,10 @@ module.exports.authenticate = (redirect = true, message = 'Unauthorized') => {
       return await next();
     }
 
-    ctx.status = 401;
+    if(!redirect) {
+      ctx.status = 401;
+    }
+
     ctx.body = {message};
   };
 };
