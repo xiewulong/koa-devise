@@ -69,7 +69,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
         configurable: false,
         enumerable: true,
         get() {
-          return this.session[`${options.session_key}_referrer`] || '/';
+          return this.session[`${options.session_key}_referrer`] || this.get('Referrer') || '/';
         }
       },
     });
