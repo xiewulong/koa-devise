@@ -32,9 +32,10 @@ module.exports = (options = {}, identity = (id) => {}) => {
 
     Object.defineProperties(ctx, {
       authenticate: {
+        configurable: false,
+        enumerable: true,
         value(redirect = true) {
           let guest = !this[options.context_key];
-
           if(!guest) {
             return true;
           }
@@ -43,18 +44,33 @@ module.exports = (options = {}, identity = (id) => {}) => {
             return false;
           }
 
+          this.session[`${options.session_key}_referrer`] = this.get('Referrer') || '/';
           this.redirect(options.login_url);
         },
+        writable: false,
       },
       login: {
+        configurable: false,
+        enumerable: true,
         value(id, timeout_in = options.timeout_in) {
           return this.session[options.session_key] = {id, timeout_in, last_requested_at: + new Date()};
         },
+        writable: false,
       },
       logout: {
+        configurable: false,
+        enumerable: true,
         value() {
           return delete this.session[options.session_key];
         },
+        writable: false,
+      },
+      user_referrer: {
+        configurable: false,
+        enumerable: true,
+        get() {
+          return this.session[`${options.session_key}_referrer`] || '/';
+        }
       },
     });
 
