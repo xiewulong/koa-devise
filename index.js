@@ -44,7 +44,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
             return false;
           }
 
-          this.session[`${options.session_key}_referrer`] = this.get('Referrer') || '/';
+          this.user_referrer = this.request.url;
           this.redirect(options.login_url);
         },
         writable: false,
@@ -70,7 +70,10 @@ module.exports = (options = {}, identity = (id) => {}) => {
         enumerable: true,
         get() {
           return this.session[`${options.session_key}_referrer`] || this.get('Referrer') || '/';
-        }
+        },
+        set(value) {
+          this.session[`${options.session_key}_referrer`] = value;
+        },
       },
     });
 
