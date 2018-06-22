@@ -19,6 +19,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
   }
 
   options = Object.assign({}, DEFAULT_OPTIONS, options || {});
+  options.referrer_session_key = `${options.session_key}_referrer`;
 
   return async (ctx, next) => {
     let now = + new Date();
@@ -61,6 +62,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
         configurable: false,
         enumerable: true,
         value() {
+          delete this.session[options.referrer_session_key];
           return delete this.session[options.session_key];
         },
         writable: false,
@@ -69,10 +71,12 @@ module.exports = (options = {}, identity = (id) => {}) => {
         configurable: false,
         enumerable: true,
         get() {
-          return this.session[`${options.session_key}_referrer`] || this.get('Referrer') || '/';
+          let user_referrer = this.session[options.referrer_session_key];
+          delete this.session[options.referrer_session_key];
+          return user_referrer || this.get('Referrer') || '/';
         },
         set(value) {
-          this.session[`${options.session_key}_referrer`] = value;
+          this.session[options.referrer_session_key] = value;
         },
       },
     });
