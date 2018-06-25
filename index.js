@@ -73,7 +73,7 @@ module.exports = (options = {}, identity = (id) => {}) => {
         get() {
           let user_referrer = this.session[options.referrer_session_key];
           delete this.session[options.referrer_session_key];
-          return user_referrer || this.get('Referrer') || '/';
+          return user_referrer || '/';
         },
         set(value) {
           this.session[options.referrer_session_key] = value;
