@@ -95,6 +95,6 @@ module.exports.authenticate = (redirect = true, message = 'Unauthorized') => {
       ctx.status = 401;
     }
 
-    ctx.body = {message};
+    ctx.body = {devise: [message]};
   };
 };
